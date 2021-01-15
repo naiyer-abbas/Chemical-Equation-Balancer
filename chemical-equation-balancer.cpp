@@ -3,7 +3,8 @@ using namespace std;
 
 int iscapital(char);
 int issmall(char);
-int c2i(char);
+int isnum(char);
+int c2i(char s);
 
 
 class Equation
@@ -59,12 +60,60 @@ void Equation :: get_reactants()
                 {
                     reactant_elements.push_back(string(1, temp[j]));
                 }
+
             }
             reactant_elements.push_back("-1");
+
+            for(int j = 0; j < temp.size(); j++)
+            {
+                if(iscapital(temp[j]) && iscapital(temp[j + 1]) && j != temp.size() - 1)
+                {
+                    reactant_value.push_back(1);
+                }
+
+                else if(iscapital(temp[j]) && issmall(temp[j+1]) && iscapital(temp[j + 2]) && j != temp.size() - 2)
+                {
+                    reactant_value.push_back(1);
+                    j++;
+                }
+
+                else if(iscapital(temp[j]) && isnum(temp[j + 1]) && j != temp.size() - 1)
+                {
+                    reactant_value.push_back(c2i(temp[j + 1]));
+                    j ++;
+                }
+
+                else if(iscapital(temp[j]) && issmall(temp[j+1]) && isnum(temp[j + 2]) && j != temp.size() - 2)
+                {
+                    reactant_value.push_back(c2i(temp[j + 2]));
+                    j += 2;
+                }
+
+                else if(iscapital(temp[j]) && j == temp.size() - 1)
+                {
+                    reactant_value.push_back(1);
+                }
+
+                else if(iscapital(temp[j]) && issmall(temp[j + 1]) && j == temp.size() - 2)
+                {
+                    reactant_value.push_back(1);
+                    j++;
+                }
+
+            }
+
+            reactant_value.push_back(-1);
 
         }
         cout<<"The reactant elements are ";
         for(const auto& e: reactant_elements)
+        {
+            cout<<e<<" ";
+        }
+        cout<<endl;
+
+        cout<<"The reactant values are ";
+        for(const auto& e: reactant_value)
         {
             cout<<e<<" ";
         }
@@ -94,6 +143,7 @@ void Equation :: get_products()
                 else if(iscapital(temp[j]) && iscapital(temp[j + 1]) && j != temp.size() - 1)
                 {
                     product_elements.push_back(string(1, temp[j]));
+
                 }
 
                 else if(iscapital(temp[j]))
@@ -174,4 +224,12 @@ int c2i(char s)
 {
     if(s >=50 && s <= 57)
         return s - 48;
+}
+
+int isnum(char c)
+{
+    if(c >= 50 && c<= 57)
+        return 1;
+    else
+        return 0;
 }
