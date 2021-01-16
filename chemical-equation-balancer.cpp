@@ -5,6 +5,14 @@ int iscapital(char);
 int issmall(char);
 int isnum(char);
 int c2i(char s);
+//int is_balanced(vector <int>, vector <string> , vector<int>, vector<string>);
+int is_balanced(vector<int> reactant_value, vector <int> product_value);
+
+vector <string> reactant_elements;
+vector <int> reactant_value;
+
+vector <string> product_elements;
+vector <int> product_value;
 
 
 class Equation
@@ -33,8 +41,7 @@ void Equation :: no_of_products()
 
 void Equation :: get_reactants()
     {
-        vector <string> reactant_elements;
-        vector <int> reactant_value;
+
 
         for(int i = 1; i <= r; i++)
         {
@@ -104,7 +111,7 @@ void Equation :: get_reactants()
 
             reactant_value.push_back(-1);
 
-        }
+        } /*
         cout<<"The reactant elements are ";
         for(const auto& e: reactant_elements)
         {
@@ -117,14 +124,13 @@ void Equation :: get_reactants()
         {
             cout<<e<<" ";
         }
-        cout<<endl;
+        cout<<endl; */
 
     }
 
 void Equation :: get_products()
     {
-        vector <string> product_elements;
-        vector <int> product_value;
+
         for(int i = 1; i <= p; i++)
         {
             string temp;
@@ -195,7 +201,7 @@ void Equation :: get_products()
             product_value.push_back(-1);
 
           }
-          cout<<"The product elements are ";
+       /*   cout<<"The product elements are ";
         for(const auto& e: product_elements)
         {
             cout<<e<<" ";
@@ -208,7 +214,7 @@ void Equation :: get_products()
             cout<<e<<" ";
         }
         cout<<endl;
-        }
+       */ }
 
 
 
@@ -249,6 +255,17 @@ int main()
     E.get_products();
     cout<<"\nUnbalanced Reaction is : \n";
     E.unbalanced();
+
+    if(is_balanced(reactant_value, product_value))
+    {
+        cout << "\n\nThe reaction is balanced\n";
+    }
+
+    else
+    {
+        cout << "\n\nThe reaction is unbalanced\n";
+    }
+
     return 0;
 }
 
@@ -281,3 +298,33 @@ int isnum(char c)
     else
         return 0;
 }
+
+int is_balanced(vector<int> reactant_value, vector <int> product_value)
+{
+    int sum1 = 0, sum2 = 0;
+
+    for(int i = 0; i < reactant_value.size(); i++)
+    {
+        if(reactant_value[i] != -1)
+            sum1 += reactant_value[i];
+    }
+
+    for(int i = 0; i < product_value.size(); i++)
+    {
+        if(product_value[i] != -1)
+            sum2 += product_value[i];
+    }
+
+
+
+    if(sum1 == sum2)
+        return 1;
+    else
+        return 0;
+}
+
+
+/*int is_balanced(vector <int> reactant_value, vector <string> reactant_elements , vector <int> product_value , vector <string> product_elements)
+{
+
+}*/
