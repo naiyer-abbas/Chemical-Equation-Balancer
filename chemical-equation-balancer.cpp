@@ -14,6 +14,9 @@ vector <int> reactant_value;
 vector <string> product_elements;
 vector <int> product_value;
 
+vector <pair < string, int > > reactant_table;
+vector <pair < string, int > > product_table;
+
 
 class Equation
 {
@@ -301,23 +304,68 @@ int isnum(char c)
 
 int is_balanced(vector<int> reactant_value, vector <int> product_value)
 {
-    int sum1 = 0, sum2 = 0;
+    vector <string> reactant_elements_copy = reactant_elements;
+    vector <int> reactant_value_copy = reactant_value;
 
-    for(int i = 0; i < reactant_value.size(); i++)
+    vector <string> product_elements_copy = product_elements;
+    vector <int> product_value_copy = product_value;
+
+            //******************** FILLING THE REACTANT TABLE ****************************************//
+
+    for(int i = 0; i < reactant_elements_copy.size(); i++)
     {
-        if(reactant_value[i] != -1)
-            sum1 += reactant_value[i];
+        if(reactant_elements_copy.at(i) != "-1")
+        {
+            reactant_table.push_back(make_pair(reactant_elements_copy.at(i) , reactant_value_copy.at(i)));
+
+             for(int j = i + 1; j < reactant_elements_copy.size(); j++)
+            {
+                if(reactant_elements_copy.at(i) == reactant_elements_copy.at(j))
+                {
+                    reactant_elements_copy.at(j) = "-1";
+                    reactant_table.at(i).second += reactant_value_copy.at(j);
+                    reactant_value_copy.at(j) = -2;
+                }
+            }
+        }
     }
 
-    for(int i = 0; i < product_value.size(); i++)
+        //******************** FILLING THE PRODUCT TABLE ****************************************//
+
+    for(int i = 0; i < product_elements_copy.size(); i++)
     {
-        if(product_value[i] != -1)
-            sum2 += product_value[i];
+        if(product_elements_copy.at(i) != "-1")
+        {
+            product_table.push_back(make_pair(product_elements_copy.at(i) , product_value_copy.at(i)));
+
+             for(int j = i + 1; j < product_elements_copy.size(); j++)
+            {
+                if(product_elements_copy.at(i) == product_elements_copy.at(j))
+                {
+                    product_elements_copy.at(j) = "-1";
+                    product_table.at(i).second += product_value_copy.at(j);
+                    product_value_copy.at(j) = -2;
+                }
+            }
+        }
     }
 
+    sort(reactant_table.begin(), reactant_table.end());
+    sort(product_table.begin(), product_table.end());
 
+    for(int i = 0; i < reactant_table.size(); i++)
+    {
+        cout<<endl<< reactant_table[i].first << "  "<< reactant_table[i].second;
+    }
 
-    if(sum1 == sum2)
+    cout<<endl;
+
+    for(int i = 0; i < reactant_table.size(); i++)
+    {
+        cout<<endl<< product_table[i].first << "  "<< product_table[i].second;
+    }
+
+    if(reactant_table == product_table)
         return 1;
     else
         return 0;
