@@ -17,6 +17,9 @@ vector <int> product_value;
 vector <pair < string, int > > reactant_table;
 vector <pair < string, int > > product_table;
 
+vector <int> coefficient_R;
+vector <int> coefficient_P;
+
 
 class Equation
 {
@@ -51,6 +54,15 @@ void Equation :: get_reactants()
             string temp;
             cout<<"Enter reactant no. "<<i<<":  ";
             cin>>temp;
+            if(temp.at(0) >=50 && temp.at(0) <= 57)
+            {
+                coefficient_R.push_back(c2i(temp.at(0)));
+            }
+
+            else
+            {
+                coefficient_R.push_back(1);
+            }
             reactants.push_back(temp);
 
             for(int j = 0; j < temp.size(); j++)
@@ -78,41 +90,44 @@ void Equation :: get_reactants()
             {
                 if(iscapital(temp[j]) && iscapital(temp[j + 1]) && j != temp.size() - 1)
                 {
-                    reactant_value.push_back(1);
+                    reactant_value.push_back(1 * coefficient_R.at(i - 1));
                 }
 
-                else if(iscapital(temp[j]) && issmall(temp[j+1]) && iscapital(temp[j + 2]) && j != temp.size() - 2)
+                else if(iscapital(temp[j]) && issmall(temp[j+1]) && iscapital(temp[j + 2]) && j < temp.size() - 2)
                 {
-                    reactant_value.push_back(1);
+                    reactant_value.push_back(1 * coefficient_R.at(i - 1));
                     j++;
                 }
 
                 else if(iscapital(temp[j]) && isnum(temp[j + 1]) && j != temp.size() - 1)
                 {
-                    reactant_value.push_back(c2i(temp[j + 1]));
+                    reactant_value.push_back(c2i(temp[j + 1]) * coefficient_R.at(i - 1));
                     j ++;
                 }
 
-                else if(iscapital(temp[j]) && issmall(temp[j+1]) && isnum(temp[j + 2]) && j != temp.size() - 2)
+                else if(iscapital(temp[j]) && issmall(temp[j+1]) && isnum(temp[j + 2]) && j < temp.size() - 2)
                 {
-                    reactant_value.push_back(c2i(temp[j + 2]));
+                    reactant_value.push_back(c2i(temp[j + 2]) * coefficient_R.at(i - 1));
                     j += 2;
                 }
 
                 else if(iscapital(temp[j]) && j == temp.size() - 1)
                 {
-                    reactant_value.push_back(1);
+                    reactant_value.push_back(1 * coefficient_R.at(i - 1));
                 }
 
                 else if(iscapital(temp[j]) && issmall(temp[j + 1]) && j == temp.size() - 2)
                 {
-                    reactant_value.push_back(1);
+                    reactant_value.push_back(1 * coefficient_R.at(i - 1));
                     j++;
                 }
 
             }
 
             reactant_value.push_back(-1);
+
+
+
 
         } /*
         cout<<"The reactant elements are ";
@@ -139,7 +154,20 @@ void Equation :: get_products()
             string temp;
             cout<<"Enter product no. "<<i<<":  ";
             cin>>temp;
+
+            if(temp.at(0) >=50 && temp.at(0) <= 57)
+            {
+                coefficient_P.push_back(c2i(temp.at(0)));
+            }
+
+            else
+            {
+                coefficient_P.push_back(1);
+            }
+
+
             products.push_back(temp);
+
 
             for(int j = 0; j < temp.size(); j++)
             {
@@ -167,35 +195,35 @@ void Equation :: get_products()
             {
                 if(iscapital(temp[j]) && iscapital(temp[j + 1]) && j != temp.size() - 1)
                 {
-                    product_value.push_back(1);
+                    product_value.push_back(1 * coefficient_P.at(i - 1));
                 }
 
-                else if(iscapital(temp[j]) && issmall(temp[j+1]) && iscapital(temp[j + 2]) && j != temp.size() - 2)
+                else if(iscapital(temp[j]) && issmall(temp[j+1]) && iscapital(temp[j + 2]) && j < temp.size() - 2)
                 {
-                    product_value.push_back(1);
+                    product_value.push_back(1 * coefficient_P.at(i - 1));
                     j++;
                 }
 
                 else if(iscapital(temp[j]) && isnum(temp[j + 1]) && j != temp.size() - 1)
                 {
-                    product_value.push_back(c2i(temp[j + 1]));
+                    product_value.push_back(c2i(temp[j + 1]) * coefficient_P.at(i - 1));
                     j ++;
                 }
 
-                else if(iscapital(temp[j]) && issmall(temp[j+1]) && isnum(temp[j + 2]) && j != temp.size() - 2)
+                else if(iscapital(temp[j]) && issmall(temp[j+1]) && isnum(temp[j + 2]) && j < temp.size() - 2)
                 {
-                    product_value.push_back(c2i(temp[j + 2]));
+                    product_value.push_back(c2i(temp[j + 2]) * coefficient_P.at(i - 1));
                     j += 2;
                 }
 
                 else if(iscapital(temp[j]) && j == temp.size() - 1)
                 {
-                    product_value.push_back(1);
+                    product_value.push_back(1 * coefficient_P.at(i - 1));
                 }
 
                 else if(iscapital(temp[j]) && issmall(temp[j + 1]) && j == temp.size() - 2)
                 {
-                    product_value.push_back(1);
+                    product_value.push_back(1 * coefficient_P.at(i - 1));
                     j++;
                 }
 
@@ -310,31 +338,35 @@ int is_balanced(vector<int> reactant_value, vector <int> product_value)
     vector <string> product_elements_copy = product_elements;
     vector <int> product_value_copy = product_value;
 
+
             //******************** FILLING THE REACTANT TABLE ****************************************//
 
     for(int i = 0; i < reactant_elements_copy.size(); i++)
     {
-        if(reactant_elements_copy.at(i) != "-1")
+        if(reactant_elements_copy.at(i) != "-1" && reactant_value_copy.at(i) != -1)
         {
             reactant_table.push_back(make_pair(reactant_elements_copy.at(i) , reactant_value_copy.at(i)));
 
              for(int j = i + 1; j < reactant_elements_copy.size(); j++)
             {
+
                 if(reactant_elements_copy.at(i) == reactant_elements_copy.at(j))
                 {
                     reactant_elements_copy.at(j) = "-1";
-                    reactant_table.at(i).second += reactant_value_copy.at(j);
-                    reactant_value_copy.at(j) = -2;
+                    reactant_table.at(reactant_table.size() - 1).second += reactant_value_copy.at(j);
+                    reactant_value_copy.at(j) = -1;
                 }
             }
         }
     }
 
+
+
         //******************** FILLING THE PRODUCT TABLE ****************************************//
 
     for(int i = 0; i < product_elements_copy.size(); i++)
     {
-        if(product_elements_copy.at(i) != "-1")
+        if(product_elements_copy.at(i) != "-1" &&  product_value_copy.at(i) != -1)
         {
             product_table.push_back(make_pair(product_elements_copy.at(i) , product_value_copy.at(i)));
 
@@ -343,12 +375,13 @@ int is_balanced(vector<int> reactant_value, vector <int> product_value)
                 if(product_elements_copy.at(i) == product_elements_copy.at(j))
                 {
                     product_elements_copy.at(j) = "-1";
-                    product_table.at(i).second += product_value_copy.at(j);
-                    product_value_copy.at(j) = -2;
+                    product_table.at(product_table.size() - 1).second += product_value_copy.at(j);
+                    product_value_copy.at(j) = -1;
                 }
             }
         }
     }
+
 
     sort(reactant_table.begin(), reactant_table.end());
     sort(product_table.begin(), product_table.end());
@@ -364,6 +397,7 @@ int is_balanced(vector<int> reactant_value, vector <int> product_value)
     {
         cout<<endl<< product_table[i].first << "  "<< product_table[i].second;
     }
+
 
     if(reactant_table == product_table)
         return 1;
